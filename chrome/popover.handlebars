@@ -1,0 +1,25 @@
+<div class="pop-over clearfix fancy-scrollbar" style="left: {{left-pos}}px; top: {{top-pos}}px; max-height: 891px; display: block;">
+  <div class="header clearfix">
+    <a class="back-btn js-back-view" href="#" style="display: none;">
+      <span class="icon-sm icon-leftarrow"></span>
+    </a>
+    <span class="header-title">GitHub Issue</span>
+    <a class="close-btn js-close-popover" href="#"> <span class="icon-sm icon-close"></span> </a>
+  </div>
+  <div class="content clearfix" style="">
+    <div>
+      <form>
+        <label for="github-repo">GitHub Repository</label>
+        <input type="text" id="github-repo" placeholder="username/repo">
+
+        <label for="issue-title">Issue Title</label>
+        <input type="text" id="issue-title" placeholder="Title">
+
+        <label for="issue-description">Issue Description</label>
+        <textarea type="textarea" id="issue-description" placeholder="Describe the issue..."></textarea>
+
+        <input type="submit" class="primary wide js-create-github-issue">
+      </form>
+    </div>
+  </div>
+</div>
