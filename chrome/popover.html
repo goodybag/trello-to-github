@@ -1,25 +1,23 @@
-<div id="github-popover" class="pop-over clearfix fancy-scrollbar" style="left:1123px; top: 636px; max-height: 891px; display: none;">
-  <div class="header clearfix">
-    <a class="back-btn js-back-view" href="#" style="display: none;">
-      <span class="icon-sm icon-leftarrow"></span>
-    </a>
-    <span class="header-title">GitHub Issue</span>
-    <a class="close-btn js-close-popover" href="#"> <span class="icon-sm icon-close"></span> </a>
-  </div>
-  <div class="content clearfix" style="">
-    <div>
-      <form>
-        <label for="github-repo">GitHub Repository</label>
-        <input type="text" id="github-repo" placeholder="username/repo">
+<div class="header clearfix">
+  <a class="back-btn js-back-view" href="#" style="display: none;">
+    <span class="icon-sm icon-leftarrow"></span>
+  </a>
+  <span class="header-title">GitHub Issue</span>
+  <a class="close-btn js-close-github-popover" href="#"> <span class="icon-sm icon-close"></span> </a>
+</div>
+<div class="content clearfix" style="">
+  <div>
+    <form>
+      <label for="github-repo">GitHub Repository</label>
+      <input type="text" id="github-repo" placeholder="username/repo">
 
-        <label for="issue-title">Issue Title</label>
-        <input type="text" id="issue-title" placeholder="Title">
+      <label for="issue-title">Issue Title</label>
+      <input type="text" id="issue-title" placeholder="Title">
 
-        <label for="issue-description">Issue Description</label>
-        <textarea type="textarea" id="issue-description" placeholder="Describe the issue..."></textarea>
+      <label for="issue-description">Issue Description</label>
+      <textarea type="textarea" id="issue-description" placeholder="Describe the issue..."></textarea>
 
-        <input type="submit" class="primary wide js-create-github-issue">
-      </form>
-    </div>
+      <input type="submit" class="primary wide js-create-github-issue">
+    </form>
   </div>
 </div>
