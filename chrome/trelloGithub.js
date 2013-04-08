@@ -19,12 +19,12 @@ var trelloGithub = (function($) {
     popoverOffset.top += link.height() + 18;
   }
 
-  function setupPopover {
+  function setupPopover() {
     popover_html = '<div id="github-popover" class="pop-over clearfix fancy-scrollbar" style="left:' + popoverOffset.left + 'px; top: ' + popoverOffset.top + 'px; max-height: 891px; display: none;"></div>';
     $('body').append(popover_html);
     $('#github-popover').load(chrome.extension.getURL('popover.html'));
     $('.js-close-github-popover').click(function(e){$('#github-popover').hide();});
-    $('body').click(function(e){
+    $('body').click(function(e) {
       if ($(e.target).parents().index($('#github-popover') == -1)) {
         $('#github-popover').hide();
       }
@@ -36,3 +36,5 @@ var trelloGithub = (function($) {
 
   return exports;
 })(jQuery);
+
+trelloGithub.addButton();
