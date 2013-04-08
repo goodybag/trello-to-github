@@ -36,5 +36,14 @@ var trelloGithub = (function($) {
 
   return exports;
 })(jQuery);
+      clearInterval(intervalId);
+      trelloGithub(addButton);
+    }
+  }
+});
+*/
 
-trelloGithub.addButton();
+$(document).ready(function(){
+  console.log('trello-github');
+  trelloGithub.addButton();
+});

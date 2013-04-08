@@ -2,14 +2,18 @@
   "name":"Trello-Github",
   "version":"0.0.1",
   "description":"Create GitHub issues from Trello cards",
+  "manifest_version": 2,
   "content_scripts": [
     {
-      "matches":["https://trello.com/board/*"],
+      "matches":["https://trello.com/card/*", "https://trello.com/board/*"],
       "js":["lib/jquery-1.9.1.js", "trelloGithub.js"]
     }
   ],
   "permissions":[
-    "https://api.github.com",
-    "https://api.trello.com"
+    "https://api.github.com/",
+    "https://api.trello.com/"
+  ],
+  "web_accessible_resources": [
+    "popover.html"
   ]
 }
