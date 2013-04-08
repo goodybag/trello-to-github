@@ -32,6 +32,7 @@ var trelloGithub = (function($) {
     $('.button-link:not(.js-github-issue)').click(function(e){$('#github-popover').hide();});
   }
 
+  setupPopover();
 
   return exports;
 })(jQuery);
