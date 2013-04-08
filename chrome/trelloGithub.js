@@ -36,14 +36,22 @@ var trelloGithub = (function($) {
 
   return exports;
 })(jQuery);
-      clearInterval(intervalId);
-      trelloGithub(addButton);
-    }
-  }
-});
-*/
 
 $(document).ready(function(){
   console.log('trello-github');
   trelloGithub.addButton();
+});
+
+$('.list-card').click(function(){
+  var intervalId;
+  intervalId = setInterval(foo, 100);
+
+  function foo() {
+    console.log('foo');
+    if ($('.window').is(':visible')) {
+      console.log('visible');
+      clearInterval(intervalId);
+      trelloGithub.addButton();
+    }
+  }
 });
