@@ -117,9 +117,9 @@ var trelloGithub = (function($, Trello) {
         $.ajax({
           url:'https://api.github.com/repos/' + repo[0] + '/' + repo[1] + '/issues',
           type:'POST',
+          headers:{'Authorization':'token ' + githubKey},
           contentType:'application/json',
           data:JSON.stringify({
-            access_token:githubKey,
             title:title,
             body:description
           }),
