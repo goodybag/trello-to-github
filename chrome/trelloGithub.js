@@ -2,6 +2,56 @@ var trelloGithub = (function($, Trello) {
   var exports = {};
 
   var popoverOffset = {top: 581, left: 1123}; //default value, should change before showing.
+  var githubKey;
+
+  var githubAuth = exports.githubAuth = function() {
+    githubKey = localStorage.getItem('githubKey');
+
+    var params = {};
+    location.search.replace('?', '').split('&').map(function(e, i){
+      var kv = e.split('=');
+      this[kv[0]] = kv[1];
+    }, params);
+    //location.search = '';
+
+    var code;
+    if (params['code'] != null) // if we have been passed a code, reauth
+      code = params['code'];
+    else if (githubKey == null) { // if we have no token and no code, get a code
+      location.href = 'https://github.com/login/oauth/authorize?client_id=7e75915ed424adcab18a&scope=repo&redirect_uri='+location.href
+      return;
+    }
+
+    if (code == null && githubKey != null)
+      return;
+
+    $.ajax({
+      url:'https://github.com/login/oauth/access_token',
+      type:'POST',
+      async:false,
+      contentType:'application/json',
+      data:JSON.stringify({
+        client_id:'7e75915ed424adcab18a',
+        client_secret:'7c15acf6686b5c574cad071967919bb2a17ef39a',
+        code:code
+      }),
+      dataType:'json',
+      success:function(data, textStatus, jqXHR){
+        githubKey = data['access_token'];
+        if (githubKey != null)
+          localStorage.setItem('githubKey', githubKey);
+        else {
+          debugger;
+          alert('gitub auth error');
+        }
+      },
+      error:function(jqXHR, textStatus, errorThrown){
+        console.log(errorThrown);
+        debugger;
+        alert('gitub auth error');
+      }
+    });
+  }
 
   var jsGithubIssue = exports.jsGithubIssue = function() {
     var popover = $('#github-popover');
@@ -20,7 +70,8 @@ var trelloGithub = (function($, Trello) {
   }
 
   var createIssue = exports.createIssue = function(event) {
-    var pathparts = window.location.pathname.split('/');
+    debugger;
+    var pathparts = location.pathname.split('/');
     var boardId = pathparts[pathparts.length - 2];
     var cardShortId = pathparts[pathparts.length - 1];
     Trello.authorize({type:"popup", scope:{read:true, write:true, account:false}, name:"Trello-Github", success:function() {
@@ -32,6 +83,7 @@ var trelloGithub = (function($, Trello) {
         }
 
         Trello.post('/checklists/' + checklist.id + '/checkItems', {name:issue.html_url}, function() {
+          //hooray!  we've completed everything.
           window.location.reload();
         }, function() {
           alert('trello api error');
@@ -39,18 +91,16 @@ var trelloGithub = (function($, Trello) {
       }
 
       Trello.get('/boards/' + boardId + '/cards/' + cardShortId, {checklists:'all'}, function(card) {
-        debugger;
-
         var arr = card.checklists.filter(function(e, i){return e['name'] == 'github';});
         var github;
         var issue;
         var outstanding = 1;
 
-        if (arr.length == 1)
+        if (arr.length >= 1)
           github = arr[0];
         else {
           outstanding++;
-          Trello.post('/cards/' + card.id, {name:'github'}, function(checklist){
+          Trello.post('/cards/' + card.id + '/checklists', {name:'github'}, function(checklist){
             github = checklist;
             if (--outstanding <= 0)
               addToChecklist(github, issue);
@@ -64,15 +114,15 @@ var trelloGithub = (function($, Trello) {
         var title = $('#issue-title').val();
         var description = $('#issue-description').val() + '\n\n' + card.shortUrl;
 
-        //TODO: authorize with github
         $.ajax({
           url:'https://api.github.com/repos/' + repo[0] + '/' + repo[1] + '/issues',
           type:'POST',
           contentType:'application/json',
-          data:{
+          data:JSON.stringify({
+            access_token:githubKey,
             title:title,
             body:description
-          },
+          }),
           success:function(data, textStatus, jqXHR) {
             issue = data;
             if (--outstanding <= 0)
@@ -83,7 +133,10 @@ var trelloGithub = (function($, Trello) {
             alert('github api error');
           }
         });
-      }, function() {alert('trello api error');});
+      }, function() {
+        debugger;
+        alert('trello api error');
+      });
     }});
   }
 
@@ -103,6 +156,7 @@ var trelloGithub = (function($, Trello) {
   }
 
   setupPopover();
+  githubAuth();
 
   return exports;
 })(jQuery, Trello);
@@ -112,6 +166,9 @@ ob = new MutationObserver(function(objs, observer){
   if($('.window').is(':visible') && wasHidden) {
     trelloGithub.addButton();
   }
+  if($('.window').is(':hidden'))
+    $('#github-popover').hide();
+
 });
 
 //trigger ob's callback every time the style attribute on window changes
