@@ -41,13 +41,11 @@ var trelloGithub = (function($, Trello) {
         if (githubKey != null)
           localStorage.setItem('githubKey', githubKey);
         else {
-          debugger;
           alert('gitub auth error');
         }
       },
       error:function(jqXHR, textStatus, errorThrown){
         console.log(errorThrown);
-        debugger;
         alert('gitub auth error');
       }
     });
@@ -70,7 +68,6 @@ var trelloGithub = (function($, Trello) {
   }
 
   var createIssue = exports.createIssue = function(event) {
-    debugger;
     var pathparts = location.pathname.split('/');
     var boardId = pathparts[pathparts.length - 2];
     var cardShortId = pathparts[pathparts.length - 1];
@@ -134,7 +131,6 @@ var trelloGithub = (function($, Trello) {
           }
         });
       }, function() {
-        debugger;
         alert('trello api error');
       });
     }});
