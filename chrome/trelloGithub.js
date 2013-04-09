@@ -37,21 +37,11 @@ var trelloGithub = (function($) {
   return exports;
 })(jQuery);
 
-$(document).ready(function(){
-  console.log('trello-github');
-  trelloGithub.addButton();
-});
-
-$('.list-card').click(function(){
-  var intervalId;
-  intervalId = setInterval(foo, 100);
-
-  function foo() {
-    console.log('foo');
-    if ($('.window').is(':visible')) {
-      console.log('visible');
-      clearInterval(intervalId);
-      trelloGithub.addButton();
-    }
+ob = new MutationObserver(function(objs, observer){
+  var wasHidden = $.inArray('visibility: hidden', $.map(objs, function(o) { return o['oldValue']; }).join().split(/;,? ?/)) != -1;
+  if($('.window').is(':visible') && wasHidden) {
+    trelloGithub.addButton();
   }
 });
+
+ob.observe($('.window')[0], {attributes:true, attributeFilter:['style'], attributeOldValue:true})
