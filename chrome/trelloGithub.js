@@ -6,7 +6,7 @@ var trelloGithub = (function($) {
   var jsGithubIssue = exports.jsGithubIssue = function() {
     var popover = $('#github-popover');
     popover.toggle();
-    //popover.offset(popoverOffset);
+    popover.offset(popoverOffset);
   }
 
   var addButton = exports.addButton = function() {
@@ -38,7 +38,7 @@ var trelloGithub = (function($) {
 })(jQuery);
 
 ob = new MutationObserver(function(objs, observer){
-  var wasHidden = $.inArray('visibility: hidden', $.map(objs, function(o) { return o['oldValue']; }).join().split(/;,? ?/)) != -1;
+  var wasHidden = $.inArray('visibility: hidden', $.map(objs, function(o){return o['oldValue'];}).join().split(/;,? ?/)) != -1;
   if($('.window').is(':visible') && wasHidden) {
     trelloGithub.addButton();
   }
