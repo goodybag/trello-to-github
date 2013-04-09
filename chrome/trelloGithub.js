@@ -20,8 +20,70 @@ var trelloGithub = (function($, Trello) {
   }
 
   var createIssue = exports.createIssue = function(event) {
-    Trello.authorize({type:"popup", scope:{read:true, write:true, account:false}, name:"Trello-Github", success:function(){
-      console.log('authorized');
+    var pathparts = window.location.pathname.split('/');
+    var boardId = pathparts[pathparts.length - 2];
+    var cardShortId = pathparts[pathparts.length - 1];
+    Trello.authorize({type:"popup", scope:{read:true, write:true, account:false}, name:"Trello-Github", success:function() {
+
+      var addToChecklist = function(checklist, issue) {
+        if (checklist == null || issue == null) {
+          alert('some sort of error');
+          return;
+        }
+
+        Trello.post('/checklists/' + checklist.id + '/checkItems', {name:issue.html_url}, function() {
+          window.location.reload();
+        }, function() {
+          alert('trello api error');
+        });
+      }
+
+      Trello.get('/boards/' + boardId + '/cards/' + cardShortId, {checklists:'all'}, function(card) {
+        debugger;
+
+        var arr = card.checklists.filter(function(e, i){return e['name'] == 'github';});
+        var github;
+        var issue;
+        var outstanding = 1;
+
+        if (arr.length == 1)
+          github = arr[0];
+        else {
+          outstanding++;
+          Trello.post('/cards/' + card.id, {name:'github'}, function(checklist){
+            github = checklist;
+            if (--outstanding <= 0)
+              addToChecklist(github, issue);
+          }, function(){
+            outstanding--;
+            alert('trello api error');
+          });
+        }
+
+        var repo = $('#github-repo').val().split('/');
+        var title = $('#issue-title').val();
+        var description = $('#issue-description').val() + '\n\n' + card.shortUrl;
+
+        //TODO: authorize with github
+        $.ajax({
+          url:'https://api.github.com/repos/' + repo[0] + '/' + repo[1] + '/issues',
+          type:'POST',
+          contentType:'application/json',
+          data:{
+            title:title,
+            body:description
+          },
+          success:function(data, textStatus, jqXHR) {
+            issue = data;
+            if (--outstanding <= 0)
+              addToChecklist(github, issue);
+          },
+          error:function(jqXHR, textStatus, errorThrown) {
+            outstanding--;
+            alert('github api error');
+          }
+        });
+      }, function() {alert('trello api error');});
     }});
   }
 
