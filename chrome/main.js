@@ -183,6 +183,14 @@ var trelloGithub = (function($, Trello) {
         validate('#github-repo')
       });
     });
+
+    $('#github-popover').keyup(function(e){
+      if (e.keyCode === 27) { // if it's the escape key
+        $('#github-popover').hide();
+        e.stopPropagation();
+        document.activeElement.blur();
+      }
+    });
   }
 
   var validators = {
