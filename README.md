@@ -1,8 +1,8 @@
 # Trello to Github Issue
 
-Create github issues from trello cards
+Create github issues from trello cards.
 
-## Instalation
+## Installation
 
 1. Clone the repo.
 2. Open chrome and go to `chrome://extensions`
