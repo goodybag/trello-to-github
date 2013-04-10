@@ -1,7 +1,7 @@
 {
   "name":"github-oauth-proxy",
   "version":"0.0.1",
-  "author":"Geoffrey Parker <grp@gparker.co",
+  "author":"Geoffrey Parker <grp@gparker.co>",
   "description":"proxy github oauth token requests to preserve client_secret for client-side apps",
   "scripts":{
     "start": "node ./server.js"

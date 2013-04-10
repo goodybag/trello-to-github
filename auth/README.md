@@ -4,7 +4,7 @@ proxy github oauth token requests to preserve client_secret for client-side apps
 
 ## Configuration
 
-Create a `config.json` file in the same directory as server.js which looks like this:
+Create a `config.json` file in the same directory as `server.js` which looks like this:
 
 ```json
 {
