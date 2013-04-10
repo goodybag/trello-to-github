@@ -1,5 +1,6 @@
 var http = require('http');
 var https = require('https');
+var config = require('./config.json');
 
 function getToken(code, res) {
   if (typeof code != 'string') {
@@ -28,21 +29,19 @@ function getToken(code, res) {
     ghres.on('data', function(chunk){data += chunk;});
     ghres.on('end', function() {
       var body = JSON.parse(data);
-      if (body['error'] != null) {
+      if (body['error'] != null)
         res.writeHead(400, body['error']);
-        res.end();
-        return;
-      }
+      else
+        res.writeHead(200);
 
-      res.writeHead(200);
-      res.write(JSON.stringify(body));
+      res.write(data);
       res.end();
     });
   });
 
   var data = {
-    client_id:'7e75915ed424adcab18a',
-    client_secret:'7c15acf6686b5c574cad071967919bb2a17ef39a',
+    client_id: config.client_id,
+    client_secret: config.client_secret,
     code:code
   };
 
@@ -50,7 +49,7 @@ function getToken(code, res) {
   ghreq.end();
 }
 
-http.createServer(function (req, res) {
+var server = http.createServer(function (req, res) {
   res.setHeader('Allow', 'POST');
   res.setHeader('Accept', 'application/json');
   var data = '';
@@ -78,6 +77,11 @@ http.createServer(function (req, res) {
     var body = data != '' ? JSON.parse(data) : undefined;
     getToken(body['code'], res);
   });
-}).listen(80);
+});
 
-console.log('running on port 80');
+exports.start = function(port) {
+  server.listen(port);
+  console.log('running on port ' + port);
+}
+
+exports.start(8000);
