@@ -32,7 +32,7 @@ var trelloGithub = (function($, Trello) {
       contentType:'application/json',
       data:JSON.stringify({
         client_id:'7e75915ed424adcab18a',
-        client_secret:'7c15acf6686b5c574cad071967919bb2a17ef39a',
+        client_secret:'784d8d9fd6530967c8a118ee0f8c968c07712cb0',
         code:code
       }),
       dataType:'json',
