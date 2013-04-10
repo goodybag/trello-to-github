@@ -72,6 +72,9 @@ var trelloGithub = (function($, Trello) {
   }
 
   var createIssue = exports.createIssue = function(event) {
+    if (!['#github-repo', '#issue-title'].map(function(e){return validate(e);}).reduce(function(p, c, i, a){return p&&c;}, true))
+      return;
+
     var pathparts = location.pathname.split('/');
     var boardId = pathparts[pathparts.length - 2];
     var cardShortId = pathparts[pathparts.length - 1];
@@ -85,7 +88,8 @@ var trelloGithub = (function($, Trello) {
 
         Trello.post('/checklists/' + checklist.id + '/checkItems', {name:issue.html_url}, function() {
           //hooray!  we've completed everything.
-          window.location.reload();
+          $('#github-popover').hide();
+          //window.location.reload();
         }, function() {
           alert('trello api error');
         });
@@ -151,7 +155,37 @@ var trelloGithub = (function($, Trello) {
         }
       });
       $('.js-create-github-issue').click(createIssue);
+
+      //validation
+      $('#issue-title').blur(function(e){
+        validate('#issue-title');
+      });
+
+      $('#github-repo').blur(function(e) {
+        validate('#github-repo')
+      });
     });
+  }
+
+  var validators = {
+    '#github-repo':function(){
+      var good = (/^[^\s\/]+\/[^\s\/]+$/.test($('#github-repo').val()));
+      $('#github-repo').toggleClass('input-error', !good);
+      return good;
+    },
+    '#issue-title':function(){
+      var good =  $('#issue-title').val().length > 0;
+      $('#issue-title').toggleClass('input-error', !good);
+      return good;
+    }
+  };
+
+  var validate = exports.validate = function(id) {
+    var validator = validators[id];
+    if (typeof validator !== 'function')
+      return null;
+
+    return validator();
   }
 
   setupPopover();
