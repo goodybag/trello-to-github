@@ -57,6 +57,7 @@ var trelloGithub = (function($, Trello) {
     $('.t2g-input').removeClass('input-error');
     popover.toggle();
     popover.offset(popoverOffset);
+    $('#github-repo').focus();
   }
 
   var addButton = exports.addButton = function() {
