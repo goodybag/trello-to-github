@@ -6,7 +6,8 @@
   "content_scripts": [
     {
       "matches":["https://trello.com/card/*", "https://trello.com/board/*"],
-      "js":["lib/jquery-1.9.1.js", "lib/trello.js", "main.js"]
+      "js":["lib/jquery-1.9.1.js", "lib/bootstrap-typeahead.js", "lib/trello.js", "main.js"],
+      "css":["css/bootstrap.css"]
     }
   ],
   "permissions":[

@@ -71,6 +71,15 @@ var trelloGithub = (function($, Trello) {
     });
   }
 
+  function addToKnownRepos(repo) {
+    var knownRepos = JSON.parse(localStorage.getItem('knownRepos'));
+    if (knownRepos == null)
+      knownRepos = [];
+    if (knownRepos.indexOf(repo) === -1)
+      knownRepos.push(repo);
+    localStorage.setItem('knownRepos', JSON.stringify(knownRepos));
+  }
+
   var createIssue = exports.createIssue = function(event) {
     if (!['#github-repo', '#issue-title'].map(function(e){return validate(e);}).reduce(function(p, c, i, a){return p&&c;}, true))
       return;
@@ -115,12 +124,12 @@ var trelloGithub = (function($, Trello) {
           });
         }
 
-        var repo = $('#github-repo').val().split('/');
+        var repo = $('#github-repo').val();
         var title = $('#issue-title').val();
         var description = $('#issue-description').val() + '\n\n' + card.shortUrl;
 
         $.ajax({
-          url:'https://api.github.com/repos/' + repo[0] + '/' + repo[1] + '/issues',
+          url:'https://api.github.com/repos/' + repo + '/issues',
           type:'POST',
           headers:{'Authorization':'token ' + githubKey},
           contentType:'application/json',
@@ -129,6 +138,7 @@ var trelloGithub = (function($, Trello) {
             body:description
           }),
           success:function(data, textStatus, jqXHR) {
+            addToKnownRepos(repo);
             issue = data;
             if (--outstanding <= 0)
               addToChecklist(github, issue);
@@ -155,6 +165,11 @@ var trelloGithub = (function($, Trello) {
         }
       });
       $('.js-create-github-issue').click(createIssue);
+
+      $('#github-repo').typeahead({
+        source:JSON.parse(localStorage.getItem('knownRepos')),
+        items:4
+      });
 
       //validation
       $('#issue-title').blur(function(e){
