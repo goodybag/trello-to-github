@@ -65,6 +65,10 @@ var trelloGithub = (function($, Trello) {
     link.click(jsGithubIssue);
     popoverOffset = link.offset();
     popoverOffset.top += link.height() + 18;
+
+    $('.button-link:not(.js-github-issue)').click(function(e){
+      $('#github-popover').hide();
+    });
   }
 
   var createIssue = exports.createIssue = function(event) {
@@ -146,7 +150,6 @@ var trelloGithub = (function($, Trello) {
           $('#github-popover').hide();
         }
       });
-      $('.button-link:not(.js-github-issue)').click(function(e){$('#github-popover').hide();});
       $('.js-create-github-issue').click(createIssue);
     });
   }
