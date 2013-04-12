@@ -56,6 +56,10 @@ var trelloGithub = (function($, Trello) {
     popover.toggle();
     popover.offset(popoverOffset);
     $('#github-repo').focus();
+    $('#github-repo').typeahead({
+      source:JSON.parse(localStorage.getItem('knownRepos')),
+      items:4
+    });
   }
 
   var addButton = exports.addButton = function() {
