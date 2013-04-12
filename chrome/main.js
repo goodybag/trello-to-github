@@ -26,17 +26,15 @@ var trelloGithub = (function($, Trello) {
       return;
 
     $.ajax({
-      url:'https://github.com/login/oauth/access_token',
+      url:'https://github-oauth-proxy.jit.su',
       type:'POST',
       async:false,
       contentType:'application/json',
       data:JSON.stringify({
-        client_id:'7e75915ed424adcab18a',
-        client_secret:'784d8d9fd6530967c8a118ee0f8c968c07712cb0',
         code:code
       }),
       dataType:'json',
-      success:function(data, textStatus, jqXHR){
+      success:function(data, textStatus, jqXHR) {
         githubKey = data['access_token'];
         if (githubKey != null)
           localStorage.setItem('githubKey', githubKey);
@@ -86,6 +84,9 @@ var trelloGithub = (function($, Trello) {
   var createIssue = exports.createIssue = function(event) {
     if (!['#github-repo', '#issue-title'].map(function(e){return validate(e);}).reduce(function(p, c, i, a){return p&&c;}, true))
       return;
+
+    if (githubKey == null)
+      return githubAuth();
 
     var pathparts = location.pathname.split('/');
     var boardId = pathparts[pathparts.length - 2];
@@ -148,6 +149,9 @@ var trelloGithub = (function($, Trello) {
           },
           error:function(jqXHR, textStatus, errorThrown) {
             outstanding--;
+            localStorage.removeItem('githubKey');
+            githubKey = undefined;
+            githubAuth();
             alert('github api error');
           }
         });

@@ -13,7 +13,7 @@
   "permissions":[
     "https://api.github.com/",
     "https://api.trello.com/",
-    "https://github.com/login/oauth/access_token"
+    "https://github-oauth-proxy.jit.su/"
   ],
   "web_accessible_resources": [
     "popover.html"
