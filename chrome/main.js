@@ -63,8 +63,8 @@ var trelloGithub = (function($, Trello) {
   }
 
   var addButton = exports.addButton = function() {
-    var btnhtml = '<a class="button-link js-github-issue" title="Create cooresponding github issue">\n'
-      + '  <span class="icon-sm"></span> GitHub Issue...\n'
+    var btnhtml = '<a class="button-link js-github-issue" title="Create corresponding github issue">\n'
+      + '  <span class="icon-sm icon-pin"></span> GitHub Issue...\n'
       + '</a>';
     var link = $(btnhtml).insertBefore($('div.other-actions div.js-subscribe-sidebar-button'));
     link.click(jsGithubIssue);
