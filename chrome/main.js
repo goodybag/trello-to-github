@@ -93,8 +93,7 @@ var trelloGithub = (function($, Trello) {
       return githubAuth();
 
     var pathparts = location.pathname.split('/');
-    var boardId = pathparts[pathparts.length - 2];
-    var cardShortId = pathparts[pathparts.length - 1];
+    var cardShortId = pathparts[2];
     Trello.authorize({type:"popup", scope:{read:true, write:true, account:false}, name:"Trello-Github", success:function() {
 
       var addToChecklist = function(checklist, issue) {
@@ -112,7 +111,7 @@ var trelloGithub = (function($, Trello) {
         });
       }
 
-      Trello.get('/boards/' + boardId + '/cards/' + cardShortId, {checklists:'all'}, function(card) {
+      Trello.get('/cards/' + cardShortId, {checklists:'all'}, function(card) {
         var arr = card.checklists.filter(function(e, i){return e['name'] == 'github';});
         var github;
         var issue;
